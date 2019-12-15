@@ -5,8 +5,10 @@ from time import sleep
 
 def getDifficulty():
     layout = [
-        [gui.Text("Difficulty Level:")],
+        [gui.Text("Speed:")],
         [gui.Radio("Easy","DiffRadio"),gui.Radio("Medium","DiffRadio",default=True),gui.Radio("Hard","DiffRadio"),gui.Radio("Extreme","DiffRadio")],
+        [gui.Text("Initial Size:")],
+        [gui.Slider(range=(1,100),default_value=5,orientation='h',size=(50,10))],
         [gui.OK()]
     ]
 
@@ -14,10 +16,10 @@ def getDifficulty():
     event , values = window.read()
     window.close()
 
-    if values[0]: return 2.00
-    if values[1]: return 1.00
-    if values[2]: return 0.50
-    if values[3]: return 0.25
+    if values[0]: return (2.00, values[4])
+    if values[1]: return (1.00, values[4])
+    if values[2]: return (0.50, values[4])
+    if values[3]: return (0.25, values[4])
 
 def showNumber():
     global pos, nums, window
@@ -76,13 +78,23 @@ window = gui.Window('Memory Game', layout, keep_on_top=True, font=(None, 15))
 
 
 nums = []
-level = 5
 pos = 'box0'
 
 isStart = 1
 isWaiting = 0
-if (sec := getDifficulty()) == None:
+
+temp = getDifficulty()
+
+
+if temp == None:
     sec = 1
+    level = 5
+else:
+    sec , level = temp
+
+print(level)
+print(sec)
+
 while True:
     
     event, values = window.read()
